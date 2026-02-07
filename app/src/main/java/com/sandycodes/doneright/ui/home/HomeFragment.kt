@@ -2,21 +2,23 @@ package com.sandycodes.doneright.ui.home
 
 import androidx.fragment.app.Fragment
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sandycodes.doneright.R
 import com.sandycodes.doneright.data.local.Entity.TaskStatus
 import com.sandycodes.doneright.data.local.database.DoneRightDatabase
 import com.sandycodes.doneright.data.repository.TaskRepository
 import com.sandycodes.doneright.databinding.FragmentHomeBinding
-import com.sandycodes.doneright.ui.addtask.AddTaskBottomSheet
+import com.sandycodes.doneright.ui.addtask.AddEditTaskBottomSheet
+import com.sandycodes.doneright.ui.model.HomeItem
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var viewModel: HomeViewModel
-    private lateinit var adapter: TaskAdapter
+    private lateinit var adapter: HomeAdapter
     lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
@@ -24,7 +26,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
-//        return inflater.inflate(R.layout.fragment_home, container, false)
         return binding.root
     }
 
@@ -35,34 +36,62 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val repository = TaskRepository(dao)
         viewModel = HomeViewModel(repository)
 
-        adapter = TaskAdapter { task -> viewModel.updateTaskStatus(task)}
+        adapter = HomeAdapter(
+            onStatusClick = { task ->
+                viewModel.updateTaskStatus(task)
+            },
+            onItemClick = { task ->
+                AddEditTaskBottomSheet(task)
+                    .show(parentFragmentManager, "EditTask")
+            }
+        )
 
-//        val recyclerView = view.findViewById<RecyclerView>(R.id.taskRecyclerView)
         val recyclerView = binding.taskRecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
-        viewModel.tasks.observe(viewLifecycleOwner) { tasks ->
-            adapter.submitList(tasks)
-            val emptyLayout = binding.emptyStateLayout
+        viewModel.homeItems.observe((viewLifecycleOwner)) { items ->
+            adapter.submitList(items)
 
-            if (tasks.isEmpty() || tasks.all { it.status == TaskStatus.DONE }) {
-                recyclerView.visibility = View.GONE
-                emptyLayout.visibility = View.VISIBLE
-            } else {
-                emptyLayout.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE
-            }
+            val hasAnyTaskItem = items.any {it is HomeItem.TaskItem}
+
+            binding.taskRecyclerView.visibility =
+                if (hasAnyTaskItem) View.VISIBLE else View.GONE
+
+            binding.emptyStateLayout.visibility =
+                if (hasAnyTaskItem) View.GONE else View.VISIBLE
+        }
+        binding.addtask.setOnClickListener {
+            AddEditTaskBottomSheet()
+                .show(parentFragmentManager, "AddEditTaskBottomSheet")
         }
 
-        viewModel.tasks.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-        }
-
-        val addtaskbtn = binding.addtask
-
-        addtaskbtn.setOnClickListener {
-            AddTaskBottomSheet().show(parentFragmentManager, "AddTaskBottomSheet")
-        }
+//        viewModel.tasks.observe(viewLifecycleOwner) { tasks ->
+//            Log.d("TASK_LIST", "Recieved ${tasks.size} tasks")
+//            tasks.forEach {
+//                Log.d("TASK_LIST", "${it.title} -> ${it.status}")
+//            }
+//            adapter.submitList(tasks)
+//            val emptyLayout = binding.emptyStateLayout
+//
+//            if (tasks.isEmpty() || tasks.all { it.status == TaskStatus.DONE }) {
+//                recyclerView.visibility = View.GONE
+//                emptyLayout.visibility = View.VISIBLE
+//            } else {
+//                emptyLayout.visibility = View.GONE
+//                recyclerView.visibility = View.VISIBLE
+//            }
+//        }
+//
+//        viewModel.tasks.observe(viewLifecycleOwner) {
+//            adapter.submitList(it)
+//        }
+//
+//        val addtaskbtn = binding.addtask
+//
+//        addtaskbtn.setOnClickListener {
+//            AddEditTaskBottomSheet().show(parentFragmentManager, "AddEditTaskBottomSheet")
+//        }
 
 
     }
