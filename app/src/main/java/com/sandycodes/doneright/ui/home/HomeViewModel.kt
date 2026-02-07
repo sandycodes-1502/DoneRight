@@ -11,38 +11,26 @@ import com.sandycodes.doneright.data.local.Entity.TaskEntity
 import com.sandycodes.doneright.data.local.Entity.TaskStatus
 import com.sandycodes.doneright.data.repository.TaskRepository
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val repository: TaskRepository
 ) : ViewModel() {
 
-//    val tasks: LiveData<List<TaskEntity>> = repository.getAllTasks().asLiveData()
+    val tasks: LiveData<List<TaskEntity>> =
+        repository.getAllTasks()
+            .map { list ->
+                list.sortedWith (
+                    compareBy<TaskEntity> { priority(it.status) }
+                    .thenByDescending { it.updatedAt }
+                )
+            }.asLiveData()
 //
 //    val activeTasks: LiveData<List<TaskEntity>> = repository.getActiveTasks().asLiveData()
 //    val completedTasks: LiveData<List<TaskEntity>> = repository.getCompletedTasks().asLiveData()
 
 
-    val homeItems: LiveData<List<HomeItem>> =
-        combine(
-            repository.getActiveTasks(),
-            repository.getCompletedTasks()
-        ) { active, completed ->
-
-            val items = mutableListOf<HomeItem>()
-
-            if (active.isNotEmpty()) {
-                items.add(HomeItem.Header("Active Tasks"))
-                active.forEach { items.add(HomeItem.TaskItem(it)) }
-            }
-
-            if (completed.isNotEmpty()) {
-                items.add(HomeItem.Header("Done Tasks"))
-                completed.forEach { items.add(HomeItem.TaskItem(it)) }
-            }
-
-            items
-        }.asLiveData()
 
     fun updateTaskStatus(task: TaskEntity) {
         val newStatus = when (task.status) {
@@ -62,5 +50,14 @@ class HomeViewModel(
             )
         }
     }
+
+    private fun priority(status: TaskStatus): Int {
+        return when (status) {
+            TaskStatus.TODO -> 0
+            TaskStatus.IN_PROGRESS -> 1
+            TaskStatus.DONE -> 2
+        }
+    }
+
 
 }

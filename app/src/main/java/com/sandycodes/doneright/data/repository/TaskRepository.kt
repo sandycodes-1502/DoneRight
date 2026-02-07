@@ -26,11 +26,4 @@ class TaskRepository(
         taskDao.deleteTask(task)
     }
 
-    fun getActiveTasks(): Flow<List<TaskEntity>> {
-        return taskDao.getActiveTasks()
-    }
-
-    fun getCompletedTasks(): Flow<List<TaskEntity>> {
-        return taskDao.getCompletedTasks()
-    }
 }

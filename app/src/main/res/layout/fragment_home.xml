@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/dark_mesh_gradient">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -11,22 +12,22 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/taskRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:padding="12dp"
+            android:layout_height="match_parent"
+            android:padding="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <LinearLayout
             android:id="@+id/emptyStateLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_gravity="center"
             android:orientation="vertical"
             android:visibility="gone">
 
             <TextView
                 android:id="@+id/tvEmptyTitle"
                 android:text="All tasks completed!"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textStyle="bold"
@@ -34,7 +35,7 @@
 
             <TextView
                 android:text="You’re all caught up. Enjoy your day 😌"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:textColor="@color/dr_text_secondary"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

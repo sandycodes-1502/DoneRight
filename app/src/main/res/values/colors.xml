@@ -17,6 +17,4 @@
     <color name="status_todo">#BDBDBD</color>
     <color name="status_in_progress">#2962FF</color>
     <color name="status_completed">#4CAF50</color>
-
-
 </resources>

@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import com.sandycodes.doneright.R
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sandycodes.doneright.data.local.Entity.TaskEntity
@@ -25,35 +26,6 @@ class AddEditTaskBottomSheet(
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddTaskBinding.inflate(inflater, container, false)
-
-//        val dao = DoneRightDatabase
-//            .getInstance(requireContext())
-//            .taskDao()
-//
-//        val savebtn = binding.btnSave
-//        savebtn.setOnClickListener {
-//            val title = binding.etTitle.text.toString().trim()
-//            val description = binding.etDescription.text.toString().trim()
-//
-//            if(title.isEmpty()) {
-//                binding.etTitle.error = "Requried"
-//                return@setOnClickListener
-//            }
-//
-//            lifecycleScope.launch {
-//                TaskRepository(dao).insertTask(
-//                    TaskEntity(
-//                        title = title,
-//                        description = description
-//                    )
-//                )
-//                dismiss()
-//            }
-//
-//            Toast.makeText(this.context, "Task inserted", Toast.LENGTH_SHORT).show()
-//
-//        }
-
         return binding.root
     }
 
@@ -62,9 +34,17 @@ class AddEditTaskBottomSheet(
         super.onViewCreated(view, savedInstanceState)
 
         task?.let {
-            binding.etTitle.setText(it.title)
-            binding.etDescription.setText(it.description)
-            binding.btnSave.text = "Update Task"
+            val title = binding.etTitle
+            val desc = binding.etDescription
+            val btnsave = binding.btnSave
+
+            val color = ContextCompat.getColor(requireContext(), R.color.white)
+
+            title.setText(it.title)
+            title.setTextColor(color)
+            desc.setText(it.description)
+            desc.setTextColor(color)
+            btnsave.text = "Update Task"
         }
 
         binding.btnSave.setOnClickListener {

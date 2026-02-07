@@ -19,18 +19,5 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
-
-//        val root = binding.root
-//        ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(
-//                systemBars.left,
-//                systemBars.top,
-//                systemBars.right,
-//                systemBars.bottom
-//            )
-//            insets
-//        }
     }
 }
