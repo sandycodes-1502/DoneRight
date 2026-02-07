@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.sandycodes.doneright.app-mergeDebugResources-64:/values-v30/values-v30.xml",
+            "map": [
+                {
+                    "source": "/home/sandyyy7263/.gradle/caches/8.13/transforms/95a69d6acc3b3859dd8e5920df9b7b81/transformed/material3-release/res/values-v30/values-v30.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "72",
+                        "endOffsets": "123"
+                    }
+                }
+            ]
+        }
+    ]
+}
