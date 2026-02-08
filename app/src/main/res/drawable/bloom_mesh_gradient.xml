@@ -42,11 +42,11 @@
         </shape>
     </item>
 
-<!--    <item>-->
-<!--        <shape android:shape="rectangle">-->
-<!--            <corners android:topLeftRadius="24dp" android:topRightRadius="24dp" />-->
-<!--            <stroke android:width="2dp" android:color="#22FFFFFF" />-->
-<!--        </shape>-->
-<!--    </item>-->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:topLeftRadius="24dp" android:topRightRadius="24dp" />
+            <stroke android:width="2dp" android:color="#22FFFFFF" />
+        </shape>
+    </item>
 
 </layer-list>

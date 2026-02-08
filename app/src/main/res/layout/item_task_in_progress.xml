@@ -12,12 +12,12 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/electric_azure_mesh_gradient">
+        android:background="@color/status_danger">
 
 
         <TextView
             android:id="@+id/taskTitle"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -27,8 +27,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="In Progress"
-            android:backgroundTint="@color/purple_200"
+            android:backgroundTint="@color/action_secondary"
             android:checkable="false"
+            android:textColor="@color/black"
             style="@style/Widget.Material3.Chip.Assist"/>
 
 

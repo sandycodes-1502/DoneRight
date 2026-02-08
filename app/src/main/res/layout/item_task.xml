@@ -12,13 +12,13 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bloom_mesh_gradient">
+        android:background="@color/status_info">
 
         <TextView
             android:id="@+id/taskTitle"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -27,6 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TODO"
+            android:textColor="@color/black"
+            app:chipBackgroundColor="@color/purple_200"
             android:checkable="false"
             style="@style/Widget.Material3.Chip.Assist"/>
 

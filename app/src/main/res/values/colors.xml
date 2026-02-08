@@ -17,4 +17,25 @@
     <color name="status_todo">#BDBDBD</color>
     <color name="status_in_progress">#2962FF</color>
     <color name="status_completed">#4CAF50</color>
+    <color name="light_green" >#FF00A86B</color>
+    <color name="bg_dark">#FF00070F</color>
+    <color name="bg_main">#FF000A0F</color>
+    <color name="bg_light">#FF000D14</color>
+
+    <color name="text_primary">#FFBDFAFF</color>
+    <color name="text_muted">#FF59C2D9</color>
+
+    <color name="highlight_ui">#FF004047</color>
+    <color name="border_main">#FF002D33</color>
+    <color name="border_muted">#FF001D24</color>
+    <color name="in_progress_bg">#FF151A36</color>
+    <color name="in_progress_chip">#FF00E1E6</color>
+    <color name="action_primary">#FF008B99</color>
+    <color name="action_secondary">#FFFF9470</color>
+
+    <color name="status_danger">#FFF5695C</color>
+    <color name="status_warning">#FF807100</color>
+    <color name="status_success">#FF009467</color>
+    <color name="status_info">#FF619BFF</color>
+
 </resources>

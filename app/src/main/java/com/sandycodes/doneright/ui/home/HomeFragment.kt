@@ -6,7 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.sandycodes.doneright.R
 import com.sandycodes.doneright.data.local.Entity.TaskStatus
 import com.sandycodes.doneright.data.local.database.DoneRightDatabase
@@ -56,6 +61,33 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewModel.tasks.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
+
+        val itemTouchHelper = ItemTouchHelper(
+            object : ItemTouchHelper.SimpleCallback(
+            0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+            ) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean = false
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.adapterPosition
+                    val task = adapter.getTaskAt(position)
+
+                    viewModel.deleteTask(task)
+
+                    Snackbar.make(
+                        binding.root, "Task Deleted", Snackbar.LENGTH_LONG,
+                    ).setAction("UNDO") {
+                        viewModel.insertTask(task)
+                    }.show()
+                }
+            }
+        )
+
+        itemTouchHelper.attachToRecyclerView(binding.taskRecyclerView)
 
         val addtaskbtn = binding.addtask
 

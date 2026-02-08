@@ -1,16 +1,24 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="15dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
         android:orientation="vertical"
-        android:background="@drawable/bloom_mesh_gradient">
+        android:background="@color/action_primary" >
 
         <TextView
             android:text="Add/Edit Task"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:textStyle="bold"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
@@ -37,11 +45,13 @@
         <Button
             android:id="@+id/btnSave"
             android:text="Save Task"
-            android:backgroundTint="@color/dr_primary"
+            android:backgroundTint="@color/status_info"
             android:textColor="@color/white"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 </layout>

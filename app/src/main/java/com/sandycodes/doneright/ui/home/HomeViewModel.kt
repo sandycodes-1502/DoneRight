@@ -26,11 +26,6 @@ class HomeViewModel(
                     .thenByDescending { it.updatedAt }
                 )
             }.asLiveData()
-//
-//    val activeTasks: LiveData<List<TaskEntity>> = repository.getActiveTasks().asLiveData()
-//    val completedTasks: LiveData<List<TaskEntity>> = repository.getCompletedTasks().asLiveData()
-
-
 
     fun updateTaskStatus(task: TaskEntity) {
         val newStatus = when (task.status) {
@@ -50,6 +45,19 @@ class HomeViewModel(
             )
         }
     }
+
+    fun insertTask(task: TaskEntity) {
+        viewModelScope.launch {
+            repository.insertTask(task)
+        }
+    }
+
+    fun deleteTask(task: TaskEntity) {
+        viewModelScope.launch {
+            repository.deleteTask(task)
+        }
+    }
+
 
     private fun priority(status: TaskStatus): Int {
         return when (status) {

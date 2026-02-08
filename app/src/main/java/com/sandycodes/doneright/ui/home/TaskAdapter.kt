@@ -28,6 +28,10 @@ class TaskAdapter(
         notifyDataSetChanged()
     }
 
+    fun getTaskAt(position: Int) : TaskEntity {
+        return tasks[position]
+    }
+
     override fun getItemCount() = tasks.size
 
     override fun getItemViewType(position: Int): Int {
