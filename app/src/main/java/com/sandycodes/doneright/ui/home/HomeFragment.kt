@@ -24,6 +24,7 @@ import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager.AuthResult
 import com.sandycodes.doneright.data.repository.TaskRepository
 import com.sandycodes.doneright.databinding.FragmentHomeBinding
 import com.sandycodes.doneright.ui.addtask.AddEditTaskBottomSheet
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -152,15 +153,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                                         ).show()
 
                                         lifecycleScope.launch {
-
                                             repository.clearLocalTasks()
-                                            Log.d("AUTH_Existing", "Cleared local task")
                                             repository.syncFromFirestore()
-                                            Log.d("AUTH_Existing", "Synced Firestore")
                                             updateAuthUi()
-                                            Log.d("AUTH_Existing", "Update auth ui")
                                             updateDrawerHeader()
-                                            Log.d("AUTH_Existing", "Updaet Drawer header")
+
+                                            delay(350)
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "Tasks Synced",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
 
                                         }
                                     }
@@ -180,11 +183,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     FirebaseAuth.getInstance()
                         .signInAnonymously()
                         .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Signed out", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Signed out & Local Tasks Cleared", Toast.LENGTH_SHORT).show()
                             updateAuthUi()
                             updateDrawerHeader()
                             FirebaseAnonymousAuthManager.ensureSignedIn {
                                 Log.d("AUTH_After_Signout", "Signed in as ${FirebaseAnonymousAuthManager.uid()}")
+                                lifecycleScope.launch {
+                                    repository.clearLocalTasks()
+                                }
                             }
                         }
                 }
@@ -222,22 +228,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         Log.d("AUTH_Name", "Signed in as ${user?.displayName} with ${user?.email}")
         val headerView = binding.navigationmenu.getHeaderView(0)
         val tvGreeting = headerView.findViewById<TextView>(R.id.tvGreeting)
-        Log.d("AUTH_Name", "Crash check 1")
         if (user != null && !user.isAnonymous) {
             var name: String?
-            Log.d("AUTH_Name", "Crash check 1.2.3")
             if (user.displayName == " " || user.displayName =="" || user.displayName == null){
                 name = user.email!!.substringBefore("@")
-                Log.d("AUTH_Name", "Crash check 2.1")
             } else {
                 name = user.displayName
-                Log.d("AUTH_Name", "Crash check 2.2")
             }
             tvGreeting.text = "Hi, $name 👋"
-            Log.d("AUTH_Name", "Crash check 3.1")
         } else {
             tvGreeting.text = "Hi there 👋"
-            Log.d("AUTH_Name", "Crash check 3.2")
         }
     }
 
