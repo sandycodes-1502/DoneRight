@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+        <group>
+
+            <item
+                android:id="@+id/menu_home"
+                android:title="Home"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:icon="@drawable/home_svgrepo_com"
+                android:padding="10dp"/>
+
+            <item
+                android:id="@+id/signinbtn"
+                android:title="Sign In"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:icon="@drawable/google_svgrepo_com"
+                android:padding="10dp"/>
+
+
+            <item
+                android:id="@+id/menu_sign_out"
+                android:title="Sign Out"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:icon="@drawable/sign_out_svgrepo_com"
+                android:padding="10dp"/>
+
+
+            <item
+                android:id="@+id/menu_help"
+                android:title="Help"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:icon="@drawable/question_mark_svgrepo_com"
+                android:padding="10dp"/>
+
+        </group>
+
+</menu>

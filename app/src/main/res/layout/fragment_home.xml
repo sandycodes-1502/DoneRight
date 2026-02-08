@@ -5,81 +5,76 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/bg_dark">
 
-    <LinearLayout
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/drawerLayout" >
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:titleTextColor="@android:color/white"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/homescreentitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
             android:layout_margin="10dp"
-            android:textColor="@color/text_primary"
+            android:gravity="center"
             android:text="Your Tasks"
+            android:textColor="@color/text_primary"
+            android:textSize="30sp"
             android:textStyle="bold"
-            android:gravity="center" />
+            app:layout_constraintBottom_toTopOf="@id/taskRecyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.01" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/taskRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:padding="8dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/homescreentitle" />
 
-        <LinearLayout
-            android:id="@+id/emptyStateLayout"
-            android:layout_width="match_parent"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addtask"
+            android:contentDescription="Add Task"
+            android:src="@drawable/baseline_add_24"
+            android:backgroundTint="@color/action_primary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintVertical_bias="0.95"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:id="@+id/navigationmenu"
+            android:background="@color/bg_light"
+            app:headerLayout="@layout/drawer_header"
+            app:menu="@menu/drawer_menu"
+            android:layout_gravity="start"
+            app:itemIconTint="@null"
+            app:itemTextColor="@color/drawer_item_text" />
 
-            <TextView
-                android:id="@+id/tvEmptyTitle"
-                android:text="All tasks completed!"
-                android:textSize="20sp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="bold"
-                android:textColor="@color/dr_text_primary"/>
-
-            <TextView
-                android:text="You’re all caught up. Enjoy your day 😌"
-                android:textSize="15sp"
-                android:textColor="@color/dr_text_secondary"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="4dp"/>
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/addtask"
-        android:backgroundTint="@color/action_primary"
-        android:src="@drawable/baseline_add_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/signinbtn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@drawable/baseline_login_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:backgroundTint="@color/action_primary"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95" />
-
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

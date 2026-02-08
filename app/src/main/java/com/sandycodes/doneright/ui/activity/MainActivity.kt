@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.graphics.Color
 import com.google.firebase.auth.FirebaseAuth
+import com.sandycodes.doneright.R
 import com.sandycodes.doneright.data.local.database.DoneRightDatabase
 import com.sandycodes.doneright.data.remote.FirebaseAnonymousAuthManager
 import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        window.statusBarColor = getColor(R.color.black)
 
         FirebaseAnonymousAuthManager.ensureSignedIn {
             Log.d("AUTH", "Signed in as ${FirebaseAnonymousAuthManager.uid()}")

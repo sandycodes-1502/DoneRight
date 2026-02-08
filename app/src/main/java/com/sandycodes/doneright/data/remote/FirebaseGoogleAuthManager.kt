@@ -59,12 +59,10 @@ object FirebaseGoogleAuthManager {
         if (user != null && user.isAnonymous) {
             user.linkWithCredential(credential)
                 .addOnSuccessListener {
-                    // ✅ Anonymous upgraded
                     onResult(AuthResult.LinkedAnonymous)
                 }
                 .addOnFailureListener { e ->
                     if (e is FirebaseAuthUserCollisionException) {
-                        // 🔥 Google account already exists
                         auth.signInWithCredential(credential)
                             .addOnSuccessListener {
                                 onResult(AuthResult.SignedInExisting)
@@ -74,6 +72,7 @@ object FirebaseGoogleAuthManager {
                         onError(e)
                     }
                 }
+
         } else {
             auth.signInWithCredential(credential)
                 .addOnSuccessListener {
