@@ -13,10 +13,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
+            android:textSize="30sp"
             android:layout_margin="10dp"
             android:textColor="@color/text_primary"
-            android:text="DONE RIGHT"
+            android:text="Your Tasks"
             android:textStyle="bold"
             android:gravity="center" />
 
@@ -64,6 +64,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.95" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/signinbtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/baseline_login_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/action_primary"
+        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.95" />

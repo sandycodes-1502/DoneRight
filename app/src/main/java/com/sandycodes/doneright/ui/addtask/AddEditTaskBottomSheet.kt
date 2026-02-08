@@ -13,6 +13,9 @@ import com.sandycodes.doneright.data.local.database.DoneRightDatabase
 import com.sandycodes.doneright.data.repository.TaskRepository
 import com.sandycodes.doneright.databinding.FragmentAddTaskBinding
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class AddEditTaskBottomSheet(
     private val task: TaskEntity? = null
@@ -34,12 +37,15 @@ class AddEditTaskBottomSheet(
         super.onViewCreated(view, savedInstanceState)
 
         task?.let {
+            val fragment_title = binding.fragmentTitle
             val title = binding.etTitle
             val desc = binding.etDescription
             val btnsave = binding.btnSave
+            binding.etcreatedAt.text = "Created at " + formatTimestamp(task.createdAt)
 
             val color = ContextCompat.getColor(requireContext(), R.color.white)
 
+            fragment_title.setText("Edit Task")
             title.setText(it.title)
             title.setTextColor(color)
             desc.setText(it.description)
@@ -52,9 +58,20 @@ class AddEditTaskBottomSheet(
         }
     }
 
+    private fun formatTimestamp(time: Long): String {
+        val sdf = SimpleDateFormat(
+            "dd MMM yyyy • hh:mm a",
+            Locale.getDefault()
+        )
+        return sdf.format(Date(time))
+    }
+
     private fun saveTask() {
         val title = binding.etTitle.text.toString().trim()
         val description = binding.etDescription.text.toString().trim()
+        val fragment_title = binding.fragmentTitle
+
+        fragment_title.setText("Add Task")
 
         if (title.isEmpty()) {
             binding.etTitle.error = "Title required"

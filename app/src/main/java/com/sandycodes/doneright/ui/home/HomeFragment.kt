@@ -6,19 +6,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarDuration
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.sandycodes.doneright.R
-import com.sandycodes.doneright.data.local.Entity.TaskStatus
 import com.sandycodes.doneright.data.local.database.DoneRightDatabase
+import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager
+import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager.AuthResult.*
 import com.sandycodes.doneright.data.repository.TaskRepository
 import com.sandycodes.doneright.databinding.FragmentHomeBinding
 import com.sandycodes.doneright.ui.addtask.AddEditTaskBottomSheet
-import com.sandycodes.doneright.ui.model.HomeItem
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -88,6 +89,52 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         )
 
         itemTouchHelper.attachToRecyclerView(binding.taskRecyclerView)
+
+        val signinbtn = binding.signinbtn
+
+        signinbtn.setOnClickListener {
+            lifecycleScope.launch {
+                FirebaseGoogleAuthManager.signIn(
+                    requireContext(),
+                    onResult = { result ->
+                        when (result) {
+                            LinkedAnonymous -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Signed in with Google",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                repository.syncFromFirestore()
+                            }
+
+                            SignedInExisting -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Signed in to existing account",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                lifecycleScope.launch {
+
+                                    repository.clearLocalTasks()
+                                    repository.syncFromFirestore()
+
+                                }
+                            }
+                        }
+                    },
+                    onError = { error ->
+                        Toast.makeText(
+                            requireContext(),
+                            "Sign in failed: ${error.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                )
+
+            }
+        }
 
         val addtaskbtn = binding.addtask
 

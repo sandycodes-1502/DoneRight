@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.Task
 import com.sandycodes.doneright.ui.model.HomeItem
 import com.sandycodes.doneright.data.local.Entity.TaskEntity
 import com.sandycodes.doneright.data.local.Entity.TaskStatus
+import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager
 import com.sandycodes.doneright.data.repository.TaskRepository
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -45,6 +46,22 @@ class HomeViewModel(
             )
         }
     }
+
+    fun onGoogleSignInResult(result: FirebaseGoogleAuthManager.AuthResult) {
+        viewModelScope.launch {
+            when (result) {
+                FirebaseGoogleAuthManager.AuthResult.LinkedAnonymous -> {
+                    repository.syncFromFirestore()
+                }
+
+                FirebaseGoogleAuthManager.AuthResult.SignedInExisting -> {
+                    repository.clearLocalTasks()
+                    repository.syncFromFirestore()
+                }
+            }
+        }
+    }
+
 
     fun insertTask(task: TaskEntity) {
         viewModelScope.launch {
