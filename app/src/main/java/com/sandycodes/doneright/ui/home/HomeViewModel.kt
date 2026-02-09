@@ -2,16 +2,13 @@ package com.sandycodes.doneright.ui.home
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.tasks.Task
-import com.sandycodes.doneright.ui.model.HomeItem
 import com.sandycodes.doneright.data.local.Entity.TaskEntity
 import com.sandycodes.doneright.data.local.Entity.TaskStatus
-import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager
 import com.sandycodes.doneright.data.repository.TaskRepository
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -27,6 +24,18 @@ class HomeViewModel(
                     .thenByDescending { it.updatedAt }
                 )
             }.asLiveData()
+
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> = _loading
+
+    init {
+        _loading.value = true
+
+        viewModelScope.launch {
+            repository.getAllTasks()
+            _loading.postValue(false)
+        }
+    }
 
     fun updateTaskStatus(task: TaskEntity) {
         val newStatus = when (task.status) {
@@ -47,22 +56,6 @@ class HomeViewModel(
         }
     }
 
-    fun onGoogleSignInResult(result: FirebaseGoogleAuthManager.AuthResult) {
-        viewModelScope.launch {
-            when (result) {
-                FirebaseGoogleAuthManager.AuthResult.LinkedAnonymous -> {
-                    repository.syncFromFirestore()
-                }
-
-                FirebaseGoogleAuthManager.AuthResult.SignedInExisting -> {
-                    repository.clearLocalTasks()
-                    repository.syncFromFirestore()
-                }
-            }
-        }
-    }
-
-
     fun insertTask(task: TaskEntity) {
         viewModelScope.launch {
             repository.insertTask(task)
@@ -75,7 +68,6 @@ class HomeViewModel(
         }
     }
 
-
     private fun priority(status: TaskStatus): Int {
         return when (status) {
             TaskStatus.TODO -> 0
@@ -83,6 +75,5 @@ class HomeViewModel(
             TaskStatus.DONE -> 2
         }
     }
-
 
 }

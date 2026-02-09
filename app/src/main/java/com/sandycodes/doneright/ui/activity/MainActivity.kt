@@ -21,11 +21,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        window.statusBarColor = getColor(R.color.black)
 
         FirebaseAnonymousAuthManager.ensureSignedIn {
             Log.d("AUTH", "Signed in as ${FirebaseAnonymousAuthManager.uid()}")
         }
+
+        window.statusBarColor = getColor(R.color.black)
 
         logAuthState("AUTH_ON_START")
 

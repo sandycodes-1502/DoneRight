@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.sandycodes.doneright.R
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.auth.FirebaseAuth
 import com.sandycodes.doneright.data.local.Entity.TaskEntity
 import com.sandycodes.doneright.data.local.database.DoneRightDatabase
 import com.sandycodes.doneright.data.repository.TaskRepository
@@ -76,6 +78,16 @@ class AddEditTaskBottomSheet(
         if (title.isEmpty()) {
             binding.etTitle.error = "Title required"
             return
+        }
+
+        val user = FirebaseAuth.getInstance().currentUser
+
+        if (user != null && user.isAnonymous) {
+            Toast.makeText(
+                requireContext(),
+                "Sign in to back up your tasks to the cloud ☁️",
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         lifecycleScope.launch {

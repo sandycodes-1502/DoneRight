@@ -1,7 +1,13 @@
 package com.sandycodes.doneright.ui.home
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.os.Build
 import androidx.fragment.app.Fragment
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +37,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: TaskAdapter
+    private var isLoading = true
     private var toolbarInitialized = false
     lateinit var binding: FragmentHomeBinding
 
@@ -66,29 +73,53 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         updateAuthUi()
         updateDrawerHeader()
 
+        val cm = requireContext()
+            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val isOnline = cm.activeNetworkInfo?.isConnected == true
+
+        if (!isOnline) {
+            Toast.makeText(
+                requireContext(),
+                "Offline mode — changes will sync later",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
         val dao = DoneRightDatabase.getInstance(requireContext()).taskDao()
         val repository = TaskRepository(dao)
         viewModel = HomeViewModel(repository)
 
         adapter = TaskAdapter( onStatusClick = { task ->
             viewModel.updateTaskStatus(task)
+            requireContext().vibrateShort()
+
         }, onItemClick = { task ->
             AddEditTaskBottomSheet(task).show(parentFragmentManager, "AddEditTaskBottomSheet")
             }
         )
 
         val recyclerView = binding.taskRecyclerView
+        val emptyLayout = binding.emptyLayout
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
         viewModel.tasks.observe(viewLifecycleOwner) { tasks ->
             Log.d("TASK_LIST", "Received ${tasks.size} tasks")
 
+            if (tasks.isEmpty() && !isLoading) {
+                recyclerView.visibility = View.GONE
+                emptyLayout.visibility = View.VISIBLE
+            } else {
+                recyclerView.visibility = View.VISIBLE
+                emptyLayout.visibility = View.GONE
+            }
             adapter.submitList(tasks)
         }
 
-        viewModel.tasks.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+        viewModel.loading.observe(viewLifecycleOwner) { isLoading = it
+            binding.progressBar.visibility =
+                if(it) View.VISIBLE else View.GONE
         }
 
         val itemTouchHelper = ItemTouchHelper(
@@ -102,7 +133,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 ): Boolean = false
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    val position = viewHolder.adapterPosition
+                    val position = viewHolder.absoluteAdapterPosition
                     val task = adapter.getTaskAt(position)
 
                     viewModel.deleteTask(task)
@@ -146,9 +177,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                                     }
 
                                     SignedInExisting -> {
+                                        val user = FirebaseAuth.getInstance().currentUser
                                         Toast.makeText(
                                             requireContext(),
-                                            "Signed in with Google",
+                                            "Welcome back ${user?.email?.substringBefore("@")}!",
                                             Toast.LENGTH_SHORT
                                         ).show()
 
@@ -183,7 +215,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     FirebaseAuth.getInstance()
                         .signInAnonymously()
                         .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Signed out & Local Tasks Cleared", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Signed out", Toast.LENGTH_SHORT).show()
                             updateAuthUi()
                             updateDrawerHeader()
                             FirebaseAnonymousAuthManager.ensureSignedIn {
@@ -216,11 +248,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         menu.menu.clear()
         menu.inflateMenu(R.menu.drawer_menu)
+        val header = menu.getHeaderView(0)
+        val userWithoutAuth = header.findViewById<TextView>(R.id.tvuserWithoutAuth)
 
         val isSignedIn = user != null && !user.isAnonymous
         Log.d("AUTH", "UpdateAuthUI called with anonymous = ${user?.isAnonymous}")
         menu.menu.findItem(R.id.signinbtn).isVisible = !isSignedIn
         menu.menu.findItem(R.id.menu_sign_out).isVisible = isSignedIn
+        if (user != null && user.isAnonymous) {
+            userWithoutAuth.visibility = View.VISIBLE
+        } else {
+            userWithoutAuth.visibility = View.GONE
+        }
     }
 
     private fun updateDrawerHeader() {
@@ -241,5 +280,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    fun Context.vibrateShort() {
+        val vibrator: Vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            vibratorManager.defaultVibrator
+        } else {
+            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
+
+        if (vibrator.hasVibrator()) {
+            val effect = VibrationEffect.createOneShot(
+                50,
+                VibrationEffect.DEFAULT_AMPLITUDE
+            )
+            vibrator.vibrate(effect)
+        }
+    }
 
 }
