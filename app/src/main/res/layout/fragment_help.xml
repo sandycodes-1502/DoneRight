@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.help.HelpFragment"
+    android:id="@+id/helpfragment"
+    android:background="@color/bg_dark" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/helptitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="HELP"
+                android:textColor="@color/text_help"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                app:cardCornerRadius="16dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/afacad_bold"
+                        android:textColor="@color/text_help"
+                        android:text="👋🏻 Welcome to DoneRight"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/text_help"
+                        android:fontFamily="@font/afacad_medium"
+                        android:text="DoneRight helps you manage your daily tasks in a simple and distraction-free way."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/text_muted_help"
+                        android:fontFamily="@font/afacad_medium"
+                        android:text="Tasks are saved locally on your device and can be synced to the cloud when you sign in, so you never lose your progress."
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                app:cardCornerRadius="16dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:text="🚀 Getting Started"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_help"
+                        android:fontFamily="@font/afacad_bold"
+                        android:textSize="18sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="3dp"
+                        android:text="• Tap the ➕ button to create a new task"
+                        android:textSize="16sp"
+                        android:layout_width="match_parent"
+                        android:textColor="@color/text_muted_help"
+                        android:fontFamily="@font/afacad_medium"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="3dp"
+                        android:fontFamily="@font/afacad_medium"
+                        android:text="• Tap a task card to edit its title"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="3dp"
+                        android:fontFamily="@font/afacad_medium"
+                        android:text="• Tap on the chip to edit status"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_muted_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="3dp"
+                        android:text="• Change task status as you work on it"
+                        android:textSize="16sp"
+                        android:layout_width="match_parent"
+                        android:textColor="@color/text_help"
+                        android:fontFamily="@font/afacad_medium"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="3dp"
+                        android:text="• Swipe a task left or right to delete it"
+                        android:fontFamily="@font/afacad_medium"
+                        android:textSize="16sp"
+                        android:layout_width="match_parent"
+                        android:textColor="@color/text_muted_help"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="6sp"
+                        android:text="The app is designed to be quick and easy, so you can focus on getting things done."
+                        android:textSize="16sp"
+                        android:textColor="@color/text_help"
+                        android:fontFamily="@font/afacad_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                app:cardCornerRadius="16dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:text="🏷 Task Statuses"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/afacad_bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/text_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="8dp"
+                        android:text="• TODO - Task is yet to be started"
+                        android:textSize="16sp"
+                        android:textColor="@color/status_info"
+                        android:fontFamily="@font/afacad_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="5dp"
+                        android:text="• IN PROGRESS - You are actively woking on it"
+                        android:textSize="16sp"
+                        android:textColor="@color/status_danger"
+                        android:fontFamily="@font/afacad_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="5dp"
+                        android:text="• DONE - Task has been completed"
+                        android:textSize="16sp"
+                        android:textColor="@color/status_success"
+                        android:fontFamily="@font/afacad_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="8dp"
+                        android:text="Each status is visually highlighted so you can quickly understand your progress."
+                        android:textSize="16sp"
+                        android:textColor="@color/text_muted_help"
+                        android:fontFamily="@font/afacad_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                app:cardCornerRadius="16dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:text="☁ Sync and Account"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/text_help"
+                        android:fontFamily="@font/afacad_bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="8dp"
+                        android:text="Tasks are always stored locally on your device, so the app works even without internet."
+                        android:textSize="16sp"
+                        android:textColor="@color/text_help"
+                        android:fontFamily="@font/afacad_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="6dp"
+                        android:text="When you sign in with Google, your tasks are also backed up to the cloud."
+                        android:textSize="16sp"
+                        android:fontFamily="@font/afacad_medium"
+                        android:textColor="@color/text_muted_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="8dp"
+                        android:text="This allows you to restore them if you reinstall the app or switch devices."
+                        android:textSize="16sp"
+                        android:textColor="@color/text_help"
+                        android:fontFamily="@font/afacad_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="8dp"
+                        android:text="Signing in is optional, but recommended for cloud backup."
+                        android:textSize="16sp"
+                        android:fontFamily="@font/afacad_medium"
+                        android:textColor="@color/text_muted_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                app:cardCornerRadius="16dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:text="❓ Frequently Asked Questions"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_help"
+                        android:textSize="20sp"
+                        android:fontFamily="@font/afacad_bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:text="Can I use the app without internet?"
+                        android:textSize="18sp"
+                        android:textColor="@color/text_help"
+                        android:fontFamily="@font/afacad_bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="5dp"
+                        android:text="Yes. DoneRight works fully offline. Changes sync automatically when you’re back online."
+                        android:textSize="16sp"
+                        android:fontFamily="@font/afacad_medium"
+                        android:textColor="@color/text_muted_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="8dp"
+                        android:text="What happens if I don’t sign in?"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/afacad_bold"
+                        android:textColor="@color/text_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="5dp"
+                        android:text="Your tasks remain stored only on your device."
+                        android:textSize="16sp"
+                        android:fontFamily="@font/afacad_medium"
+                        android:textColor="@color/text_muted_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="8dp"
+                        android:text="Will I lose my tasks?"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/afacad_bold"
+                        android:textColor="@color/text_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="5dp"
+                        android:text="Local tasks stay on your phone. Cloud tasks are restored after sign-in."
+                        android:textSize="16sp"
+                        android:fontFamily="@font/afacad_medium"
+                        android:textColor="@color/text_muted_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                app:cardCornerRadius="16dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:text="💬 Contact Developer"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_help"
+                        android:textSize="20sp"
+                        android:fontFamily="@font/afacad_bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="8dp"
+                        android:text="Have feedback, suggestions, or found a bug?"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/afacad_medium"
+                        android:textColor="@color/text_muted_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="6dp"
+                        android:text="Feel free to reach out — your feedback helps improve the app."
+                        android:textSize="16sp"
+                        android:fontFamily="@font/afacad_medium"
+                        android:textColor="@color/text_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <Button
+                        android:layout_marginTop="6dp"
+                        android:text="📧 Email the Developer"
+                        android:textSize="16sp"
+                        android:id="@+id/contactDev"
+                        android:textColor="@color/text_help"
+                        android:fontFamily="@font/afacad_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+        </LinearLayout>
+
+</ScrollView>

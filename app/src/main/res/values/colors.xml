@@ -39,4 +39,21 @@
     <color name="status_success">#FF009467</color>
     <color name="status_info">#FF619BFF</color>
 
+    <color name="bg_dark_help">#FF0F0006</color>
+    <color name="bg_help">#FF1A0013</color>
+    <color name="bg_light_help">#FF29001C</color>
+
+    <color name="text_help">#FFFEFAFD</color>
+    <color name="text_muted_help">#FFDB99C9</color>
+
+    <color name="highlight_help">#FFAB1B7A</color>
+    <color name="border_help">#FF6B0047</color>
+    <color name="border_muted_help">#FF42002C</color>
+
+    <color name="primary_help">#FFF678CD</color>
+    <color name="secondary_help">#FF008F63</color>
+    <color name="danger_help">#FFFF5E52</color>
+    <color name="warning_help">#FF6B5C00</color>
+    <color name="success_help">#FF00704D</color>
+    <color name="info_help">#FF66A1FF</color>
 </resources>
