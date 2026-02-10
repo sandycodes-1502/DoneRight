@@ -4,7 +4,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sandycodes.doneright.data.local.Entity.TaskEntity
-import com.sandycodes.doneright.data.local.Entity.TaskStatus
 
 object FirestoreService {
 
@@ -19,7 +18,7 @@ object FirestoreService {
     }
 
     fun upsertTask(task: TaskEntity) {
-        val firestoreTask = FirestoreTask(
+        val firestoreTaskEntity = FirestoreTaskEntity(
             id = task.id,
             title = task.title,
             description = task.description,
@@ -30,11 +29,11 @@ object FirestoreService {
 
         tasksCollection()
             ?.document(task.id)
-            ?.set(firestoreTask)
+            ?.set(firestoreTaskEntity)
     }
 
     fun listenTasks(
-        onTasksChanged: (List<FirestoreTask>) -> Unit
+        onTasksChanged: (List<FirestoreTaskEntity>) -> Unit
     ) {
         val collection = tasksCollection() ?: return
 
@@ -42,7 +41,7 @@ object FirestoreService {
             if (error != null || snapshot == null) return@addSnapshotListener
 
             val tasks = snapshot.documents.mapNotNull {
-                it.toObject(FirestoreTask::class.java)
+                it.toObject(FirestoreTaskEntity::class.java)
             }
 
             onTasksChanged(tasks)

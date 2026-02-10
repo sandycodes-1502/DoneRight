@@ -1,4 +1,4 @@
-package com.sandycodes.doneright.ui.addtask
+package com.sandycodes.doneright.ui.addEditTask
 
 import android.os.Bundle
 import android.view.LayoutInflater

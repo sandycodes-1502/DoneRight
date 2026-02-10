@@ -12,33 +12,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.sandycodes.doneright.R
 import com.sandycodes.doneright.data.local.database.DoneRightDatabase
-import com.sandycodes.doneright.data.remote.FirebaseAnonymousAuthManager
-import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager
-import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager.AuthResult.*
 import com.sandycodes.doneright.data.repository.TaskRepository
 import com.sandycodes.doneright.databinding.FragmentHomeBinding
-import com.sandycodes.doneright.ui.addtask.AddEditTaskBottomSheet
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.sandycodes.doneright.ui.addEditTask.AddEditTaskBottomSheet
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: TaskAdapter
     private var isLoading = true
-    private var toolbarInitialized = false
     lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
@@ -51,27 +40,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if (!toolbarInitialized) {
-            (requireActivity() as AppCompatActivity)
-                .setSupportActionBar(binding.toolbar)
-            (requireActivity() as AppCompatActivity).supportActionBar?.title = null
-            val toggle = ActionBarDrawerToggle(
-                requireActivity(),
-                binding.drawerLayout,
-                binding.toolbar,
-                R.string.open_drawer,
-                R.string.close_drawer
-            )
-
-            binding.drawerLayout.addDrawerListener(toggle)
-            toggle.syncState()
-
-            toolbarInitialized = true
-        }
-
-        updateAuthUi()
-        updateDrawerHeader()
 
         val cm = requireContext()
             .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -101,6 +69,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val recyclerView = binding.taskRecyclerView
         val emptyLayout = binding.emptyLayout
+        val homescreentitle = binding.homescreentitle
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
@@ -109,9 +78,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             if (tasks.isEmpty() && !isLoading) {
                 recyclerView.visibility = View.GONE
+                homescreentitle.visibility = View.GONE
                 emptyLayout.visibility = View.VISIBLE
             } else {
                 recyclerView.visibility = View.VISIBLE
+                homescreentitle.visibility = View.VISIBLE
                 emptyLayout.visibility = View.GONE
             }
             adapter.submitList(tasks)
@@ -149,134 +120,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         itemTouchHelper.attachToRecyclerView(binding.taskRecyclerView)
 
-        val drawerLayout = binding.drawerLayout
-        val navigationView = binding.navigationmenu
-
-        updateAuthUi()
-
-        navigationView.setNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-
-                R.id.signinbtn -> {
-                    lifecycleScope.launch {
-                        Toast.makeText(requireContext(), "Signing In...", Toast.LENGTH_SHORT).show()
-                        FirebaseGoogleAuthManager.signIn(
-                            requireContext(),
-                            onResult = { result ->
-                                when (result) {
-                                    LinkedAnonymous -> {
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Signed in with Google",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-
-                                        updateDrawerHeader()
-                                        repository.syncFromFirestore()
-                                        updateAuthUi()
-                                    }
-
-                                    SignedInExisting -> {
-                                        val user = FirebaseAuth.getInstance().currentUser
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Welcome back ${user?.email?.substringBefore("@")}!",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-
-                                        lifecycleScope.launch {
-                                            repository.clearLocalTasks()
-                                            repository.syncFromFirestore()
-                                            updateAuthUi()
-                                            updateDrawerHeader()
-
-                                            delay(350)
-                                            Toast.makeText(
-                                                requireContext(),
-                                                "Tasks Synced",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-
-                                        }
-                                    }
-                                }
-                            },
-                            onError = { error ->
-                                Toast.makeText(requireContext(), "Sign in failed: ${error.message}", Toast.LENGTH_SHORT).show()
-                                updateAuthUi()
-                                updateDrawerHeader()
-                            }
-                        )
-                    }
-                }
-
-                R.id.menu_sign_out -> {
-                    FirebaseAuth.getInstance().signOut()
-                    FirebaseAuth.getInstance()
-                        .signInAnonymously()
-                        .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Signed out", Toast.LENGTH_SHORT).show()
-                            updateAuthUi()
-                            updateDrawerHeader()
-                            FirebaseAnonymousAuthManager.ensureSignedIn {
-                                Log.d("AUTH_After_Signout", "Signed in as ${FirebaseAnonymousAuthManager.uid()}")
-                                lifecycleScope.launch {
-                                    repository.clearLocalTasks()
-                                }
-                            }
-                        }
-                }
-
-                R.id.menu_help -> {
-                    //help menu
-                }
-            }
-            drawerLayout.closeDrawers()
-            true
-        }
-
         val addtaskbtn = binding.addtask
 
         addtaskbtn.setOnClickListener {
             AddEditTaskBottomSheet().show(parentFragmentManager, "AddEditTaskBottomSheet")
-        }
-    }
-
-    private fun updateAuthUi() {
-        val user = FirebaseAuth.getInstance().currentUser
-        val menu = binding.navigationmenu
-
-        menu.menu.clear()
-        menu.inflateMenu(R.menu.drawer_menu)
-        val header = menu.getHeaderView(0)
-        val userWithoutAuth = header.findViewById<TextView>(R.id.tvuserWithoutAuth)
-
-        val isSignedIn = user != null && !user.isAnonymous
-        Log.d("AUTH", "UpdateAuthUI called with anonymous = ${user?.isAnonymous}")
-        menu.menu.findItem(R.id.signinbtn).isVisible = !isSignedIn
-        menu.menu.findItem(R.id.menu_sign_out).isVisible = isSignedIn
-        if (user != null && user.isAnonymous) {
-            userWithoutAuth.visibility = View.VISIBLE
-        } else {
-            userWithoutAuth.visibility = View.GONE
-        }
-    }
-
-    private fun updateDrawerHeader() {
-        val user = FirebaseAuth.getInstance().currentUser
-        Log.d("AUTH_Name", "Signed in as ${user?.displayName} with ${user?.email}")
-        val headerView = binding.navigationmenu.getHeaderView(0)
-        val tvGreeting = headerView.findViewById<TextView>(R.id.tvGreeting)
-        if (user != null && !user.isAnonymous) {
-            var name: String?
-            if (user.displayName == " " || user.displayName =="" || user.displayName == null){
-                name = user.email!!.substringBefore("@")
-            } else {
-                name = user.displayName
-            }
-            tvGreeting.text = "Hi, $name 👋"
-        } else {
-            tvGreeting.text = "Hi there 👋"
         }
     }
 

@@ -3,5 +3,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="open_drawer">Open navigation drawer</string>
     <string name="close_drawer">Close navigation drawer</string>
+    <string name="help_welcome">DoneRight helps you manage your daily tasks in a simple and distraction-free way. Tasks are saved locally on your device and can be synced to the cloud when you sign in, so you never lose your progress.</string>
+    <string name="help_getting_started">• Tap the ➕ button to create a new task
+        • Tap a task card to edit its title or status
+• Change task status as you work on it
+• Swipe a task to delete it
 
+The app is designed to be quick and easy, so you can focus on getting things done.</string>
+    
 </resources>

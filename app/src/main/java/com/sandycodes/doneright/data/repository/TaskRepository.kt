@@ -1,10 +1,6 @@
 package com.sandycodes.doneright.data.repository
 
-import android.content.Context
-import android.net.ConnectivityManager
 import android.util.Log
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.sandycodes.doneright.data.local.Dao.TaskDao
 import com.sandycodes.doneright.data.local.Entity.TaskEntity
 import com.sandycodes.doneright.data.local.Entity.TaskStatus
