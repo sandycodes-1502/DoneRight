@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "945292851709-oh21cec233rjg9f01ung5i4kf0fq19s7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sandycodes.doneright",
+            "certificate_hash": "17f5fa47a0809aea3fa3cf3f0b17025366117020"
+          }
+        },
+        {
           "client_id": "945292851709-ig3nlls58itvu0o07822me92driqj67t.apps.googleusercontent.com",
           "client_type": 3
         }
