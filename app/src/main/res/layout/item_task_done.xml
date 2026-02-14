@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    app:cardCornerRadius="15dp"
+    app:cardCornerRadius="20dp"
     app:cardElevation="10dp" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/status_success">
+        android:background="#00B881">
 
         <TextView
             android:id="@+id/taskTitle"
@@ -40,7 +40,7 @@
             android:text="DONE"
             android:layout_marginRight="10dp"
             android:textColor="@color/black"
-            android:backgroundTint="@color/light_green"
+            android:backgroundTint="#02E493"
             android:checkable="false"
             style="@style/Widget.Material3.Chip.Assist"/>
 
