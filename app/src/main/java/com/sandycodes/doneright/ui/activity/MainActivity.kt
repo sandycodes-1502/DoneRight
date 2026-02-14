@@ -1,12 +1,13 @@
 package com.sandycodes.doneright.ui.activity
 
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -15,6 +16,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.sandycodes.doneright.R
 import com.sandycodes.doneright.data.local.database.DoneRightDatabase
+import com.sandycodes.doneright.data.local.notificationReminder.NotificationHelper
 import com.sandycodes.doneright.data.remote.FirebaseAnonymousAuthManager
 import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager
 import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager.AuthResult.LinkedAnonymous
@@ -36,6 +38,24 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        NotificationHelper.createChannel(applicationContext)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissions(
+                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                    1001
+                )
+
+                requestPermissions(
+                    arrayOf(android.Manifest.permission.INTERNET),
+                    1002
+                )
+            }
+        }
+
         FirebaseAnonymousAuthManager.ensureSignedIn {
             Log.d("AUTH", "Signed in as ${FirebaseAnonymousAuthManager.uid()}")
         }
@@ -45,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         logAuthState("AUTH_ON_START")
 
         val dao = DoneRightDatabase.getInstance(this).taskDao()
-        val repository = TaskRepository(dao)
+        val repository = TaskRepository(this, dao)
         val menu = binding.navigationmenu
         updateAuthUi(menu)
         updateDrawerHeader(menu)

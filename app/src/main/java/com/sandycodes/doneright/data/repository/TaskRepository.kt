@@ -1,16 +1,23 @@
 package com.sandycodes.doneright.data.repository
 
+import android.content.Context
 import android.util.Log
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.sandycodes.doneright.data.local.Dao.TaskDao
 import com.sandycodes.doneright.data.local.Entity.TaskEntity
 import com.sandycodes.doneright.data.local.Entity.TaskStatus
+import com.sandycodes.doneright.data.local.notificationReminder.TaskReminderWorker
 import com.sandycodes.doneright.data.remote.FirestoreService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class TaskRepository(
+    private val context: Context,
     private val taskDao: TaskDao
 ) {
 
@@ -58,10 +65,10 @@ class TaskRepository(
     suspend fun insertTask(task: TaskEntity) {
         taskDao.insertTask(task)
         FirestoreService.upsertTask(task)
+        scheduleTaskReminder(context, task.id)
     }
 
     suspend fun updateTask(task: TaskEntity) {
-        Log.d("TASK_REPO", "DB update: ${task.title} → ${task.status}")
         taskDao.updateTask(task)
         FirestoreService.upsertTask(task)
     }
@@ -73,4 +80,18 @@ class TaskRepository(
     suspend fun clearLocalTasks() {
         taskDao.clearAllTasks()
     }
+
+    fun scheduleTaskReminder(context: Context, taskId: String) {
+
+        val data = workDataOf("TASK_ID" to taskId)
+
+        val request = OneTimeWorkRequestBuilder<TaskReminderWorker>()
+            .setInputData(data)
+            .setInitialDelay(12, TimeUnit.HOURS)
+            .addTag(taskId)
+            .build()
+
+        WorkManager.getInstance(context).enqueue(request)
+    }
+
 }

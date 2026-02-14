@@ -68,7 +68,7 @@ class HomeViewModel(
         }
     }
 
-    private fun priority(status: TaskStatus): Int {
+     fun priority(status: TaskStatus): Int {
         return when (status) {
             TaskStatus.TODO -> 0
             TaskStatus.IN_PROGRESS -> 1

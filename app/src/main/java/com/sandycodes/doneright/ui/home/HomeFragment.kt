@@ -55,7 +55,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         val dao = DoneRightDatabase.getInstance(requireContext()).taskDao()
-        val repository = TaskRepository(dao)
+        val repository = TaskRepository(requireContext(), dao)
         viewModel = HomeViewModel(repository)
 
         adapter = TaskAdapter( onStatusClick = { task ->

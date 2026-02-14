@@ -96,7 +96,7 @@ class AddEditTaskBottomSheet(
                 .getInstance(requireContext())
                 .taskDao()
 
-            val repository = TaskRepository(dao)
+            val repository = TaskRepository(requireContext(), dao)
 
             if (task == null) {
 
