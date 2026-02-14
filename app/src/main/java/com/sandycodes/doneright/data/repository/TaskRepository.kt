@@ -1,7 +1,6 @@
 package com.sandycodes.doneright.data.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
@@ -9,7 +8,7 @@ import com.sandycodes.doneright.data.local.Dao.TaskDao
 import com.sandycodes.doneright.data.local.Entity.TaskEntity
 import com.sandycodes.doneright.data.local.Entity.TaskStatus
 import com.sandycodes.doneright.data.local.notificationReminder.TaskReminderWorker
-import com.sandycodes.doneright.data.remote.FirestoreService
+import com.sandycodes.doneright.data.remote.firebase.FirestoreService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -87,7 +86,7 @@ class TaskRepository(
 
         val request = OneTimeWorkRequestBuilder<TaskReminderWorker>()
             .setInputData(data)
-            .setInitialDelay(12, TimeUnit.HOURS)
+            .setInitialDelay(9, TimeUnit.HOURS)
             .addTag(taskId)
             .build()
 

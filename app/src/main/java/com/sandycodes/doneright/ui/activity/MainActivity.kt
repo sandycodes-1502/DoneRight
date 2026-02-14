@@ -11,27 +11,39 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.sandycodes.doneright.R
 import com.sandycodes.doneright.data.local.database.DoneRightDatabase
 import com.sandycodes.doneright.data.local.notificationReminder.NotificationHelper
-import com.sandycodes.doneright.data.remote.FirebaseAnonymousAuthManager
-import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager
-import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager.AuthResult.LinkedAnonymous
-import com.sandycodes.doneright.data.remote.FirebaseGoogleAuthManager.AuthResult.SignedInExisting
+import com.sandycodes.doneright.data.local.notificationReminder.QuoteWorker
+import com.sandycodes.doneright.data.remote.firebase.FirebaseAnonymousAuthManager
+import com.sandycodes.doneright.data.remote.firebase.FirebaseGoogleAuthManager
+import com.sandycodes.doneright.data.remote.firebase.FirebaseGoogleAuthManager.AuthResult.LinkedAnonymous
+import com.sandycodes.doneright.data.remote.firebase.FirebaseGoogleAuthManager.AuthResult.SignedInExisting
+import com.sandycodes.doneright.data.remote.quotes.QuoteRepository
 import com.sandycodes.doneright.data.repository.TaskRepository
 import com.sandycodes.doneright.databinding.ActivityMainBinding
 import com.sandycodes.doneright.ui.help.HelpFragment
 import com.sandycodes.doneright.ui.home.HomeFragment
+import com.sandycodes.doneright.ui.home.HomeViewModel
+import com.sandycodes.doneright.ui.home.HomeViewModelFactory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     private var toolbarInitialized = false
+    private lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,9 +78,30 @@ class MainActivity : AppCompatActivity() {
 
         val dao = DoneRightDatabase.getInstance(this).taskDao()
         val repository = TaskRepository(this, dao)
+        val quoteRepository = QuoteRepository()
         val menu = binding.navigationmenu
         updateAuthUi(menu)
         updateDrawerHeader(menu)
+
+        val factory = HomeViewModelFactory(repository, quoteRepository)
+
+        viewModel = ViewModelProvider(this, factory)
+            .get(HomeViewModel::class.java)
+
+        viewModel.quote.observe(this) { quote ->
+
+            val navigationView = binding.navigationmenu
+            val headerView = navigationView.getHeaderView(0)
+
+            val quoteText = headerView.findViewById<TextView>(R.id.tvrandomquote)
+            val authorText = headerView.findViewById<TextView>(R.id.tvquoteauthor)
+
+            quoteText.text = quote.quote
+            authorText.text = "— ${quote.author}"
+        }
+
+        viewModel.loadQuote()
+        scheduleQuoteWorker()
 
         if (FirebaseAuth.getInstance().currentUser != null &&
             !FirebaseAuth.getInstance().currentUser!!.isAnonymous
@@ -209,7 +242,6 @@ class MainActivity : AppCompatActivity() {
                     //homepage
                     supportFragmentManager.beginTransaction()
                         .replace(binding.navHostFragment.id, homeFragment)
-                        .addToBackStack(null)
                         .commit()
                 }
             }
@@ -224,12 +256,8 @@ class MainActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
 
         if (user == null) {
-            Log.d(tag, "User = null")
             return
         }
-
-        Log.d(tag, "UID = ${user.uid}")
-        Log.d(tag, "isAnonymous = ${user.isAnonymous}")
 
         user.providerData.forEach {
             Log.d(tag, "Provider: ${it.providerId}")
@@ -258,7 +286,6 @@ class MainActivity : AppCompatActivity() {
 
     fun updateDrawerHeader(menu: NavigationView) {
         val user = FirebaseAuth.getInstance().currentUser
-        Log.d("AUTH_Name", "Signed in as ${user?.displayName} with ${user?.email}")
         val headerView = menu.getHeaderView(0)
         val tvGreeting = headerView.findViewById<TextView>(R.id.tvGreeting)
         user?.reload()
@@ -275,3 +302,24 @@ class MainActivity : AppCompatActivity() {
             tvGreeting.text = "Hi there 👋"
         }
     }
+
+    private fun scheduleQuoteWorker() {
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val request = PeriodicWorkRequestBuilder<QuoteWorker>(
+            6, TimeUnit.HOURS
+        )
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(MainActivity())
+            .enqueueUniquePeriodicWork(
+                "quote_worker",
+                ExistingPeriodicWorkPolicy.KEEP,
+                request
+            )
+    }
+

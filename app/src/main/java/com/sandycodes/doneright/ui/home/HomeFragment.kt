@@ -13,12 +13,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.sandycodes.doneright.R
 import com.sandycodes.doneright.data.local.database.DoneRightDatabase
+import com.sandycodes.doneright.data.remote.quotes.QuoteRepository
 import com.sandycodes.doneright.data.repository.TaskRepository
 import com.sandycodes.doneright.databinding.FragmentHomeBinding
 import com.sandycodes.doneright.ui.addEditTask.AddEditTaskBottomSheet
@@ -56,7 +59,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val dao = DoneRightDatabase.getInstance(requireContext()).taskDao()
         val repository = TaskRepository(requireContext(), dao)
-        viewModel = HomeViewModel(repository)
+        val factory = HomeViewModelFactory(repository, QuoteRepository())
+        viewModel = ViewModelProvider(this, factory)
+            .get(HomeViewModel::class.java)
 
         adapter = TaskAdapter( onStatusClick = { task ->
             viewModel.updateTaskStatus(task)
@@ -117,6 +122,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
             }
         )
+
+        recyclerView.itemAnimator = DefaultItemAnimator().apply {
+            moveDuration = 500
+            changeDuration = 400
+        }
 
         itemTouchHelper.attachToRecyclerView(binding.taskRecyclerView)
 

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.sandycodes.doneright.R
@@ -22,10 +23,15 @@ class TaskAdapter(
     }
     private val tasks = mutableListOf<TaskEntity>()
 
-    fun submitList(list: List<TaskEntity>) {
+    fun submitList(newList: List<TaskEntity>) {
+
+        val diffCallback = TaskDiffCallback(tasks, newList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
         tasks.clear()
-        tasks.addAll(list)
-        notifyDataSetChanged()
+        tasks.addAll(newList)
+
+        diffResult.dispatchUpdatesTo(this)
     }
 
     fun getTaskAt(position: Int) : TaskEntity {
@@ -98,6 +104,21 @@ class TaskAdapter(
 
             chip.setOnClickListener { onStatusClick(task) }
             itemView.setOnClickListener { onItemClick(task) }
+            liftAnimation()
         }
+
+        fun liftAnimation() {
+            itemView.animate()
+                .translationZ(20f)
+                .setDuration(150)
+                .withEndAction {
+                    itemView.animate()
+                        .translationZ(0f)
+                        .setDuration(200)
+                        .start()
+                }
+                .start()
+        }
+
     }
 }

@@ -16,8 +16,8 @@ android {
         applicationId = "com.sandycodes.doneright"
         minSdk = 26
         targetSdk = 36
-        versionCode = 3
-        versionName = "1.1.3"
+        versionCode = 4
+        versionName = "1.1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -95,6 +95,9 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.8.0")
 
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
