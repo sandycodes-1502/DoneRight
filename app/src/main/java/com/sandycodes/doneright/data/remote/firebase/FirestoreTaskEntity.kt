@@ -1,4 +1,4 @@
-package com.sandycodes.doneright.data.remote
+package com.sandycodes.doneright.data.remote.firebase
 
 data class FirestoreTaskEntity(
     val id: String ="",

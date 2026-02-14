@@ -1,9 +1,10 @@
-package com.sandycodes.doneright.data.remote
+package com.sandycodes.doneright.data.remote.firebase
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sandycodes.doneright.data.local.Entity.TaskEntity
+import com.sandycodes.doneright.data.remote.firebase.FirestoreTaskEntity
 
 object FirestoreService {
 

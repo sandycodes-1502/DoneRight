@@ -1,4 +1,4 @@
-package com.sandycodes.doneright.data.remote
+package com.sandycodes.doneright.data.remote.firebase
 
 import android.content.Context
 import androidx.credentials.CredentialManager
@@ -18,7 +18,7 @@ object FirebaseGoogleAuthManager {
         onError: (Throwable) -> Unit
     ) {
         try {
-            val credentialManager = CredentialManager.create(context)
+            val credentialManager = CredentialManager.Companion.create(context)
 
             val googleIdOption = GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
@@ -34,7 +34,7 @@ object FirebaseGoogleAuthManager {
             val result = credentialManager.getCredential(context, request)
 
             val googleCredential =
-                GoogleIdTokenCredential.createFrom(result.credential.data)
+                GoogleIdTokenCredential.Companion.createFrom(result.credential.data)
 
             firebaseSignIn(
                 googleCredential.idToken,

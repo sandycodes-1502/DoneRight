@@ -1,4 +1,4 @@
-package com.sandycodes.doneright.data.remote
+package com.sandycodes.doneright.data.remote.firebase
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
