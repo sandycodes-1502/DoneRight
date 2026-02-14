@@ -3,6 +3,9 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/</item>
         <item>@font/afacad_bold</item>
+        <item>@font/albert_sans_extrabold</item>
+        <item>@font/andada</item>
+        <item>@font/bodoni_moda_extrabold</item>
         <item>@font/hahmlet</item>
     </array>
 </resources>
