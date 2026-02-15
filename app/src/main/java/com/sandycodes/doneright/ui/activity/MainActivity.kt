@@ -114,7 +114,16 @@ class MainActivity : AppCompatActivity() {
             textSize = 25f
             gravity = Gravity.CENTER
             setTextColor(resources.getColor(R.color.white, theme))
-            typeface = ResourcesCompat.getFont(this@MainActivity, R.font.afacad_bold)
+
+            try {
+                typeface = ResourcesCompat.getFont(this@MainActivity, R.font.afacad_bold)
+            } catch (e: Exception) {
+                try {
+                    typeface = ResourcesCompat.getFont(this@MainActivity, R.font.afacad_medium)
+                } catch (e2: Exception) {
+                    typeface = android.graphics.Typeface.DEFAULT_BOLD
+                }
+            }
         }
 
         if (!toolbarInitialized) {
@@ -310,7 +319,7 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val request = PeriodicWorkRequestBuilder<QuoteWorker>(
-            6, TimeUnit.HOURS
+            4, TimeUnit.HOURS
         )
             .setConstraints(constraints)
             .build()
