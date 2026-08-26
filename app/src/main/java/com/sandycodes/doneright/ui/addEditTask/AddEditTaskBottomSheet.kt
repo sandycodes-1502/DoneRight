@@ -43,7 +43,8 @@ class AddEditTaskBottomSheet(
             val title = binding.etTitle
             val desc = binding.etDescription
             val btnsave = binding.btnSave
-            binding.etcreatedAt.text = "Created at " + formatTimestamp(task.createdAt)
+            val createdAt = binding.etcreatedAt
+            createdAt.text = "Created at " + formatTimestamp(task.createdAt)
 
             val color = ContextCompat.getColor(requireContext(), R.color.white)
 
@@ -105,6 +106,11 @@ class AddEditTaskBottomSheet(
                         title = title,
                         description = description
                     )
+                )
+
+                parentFragmentManager.setFragmentResult(
+                    "task_added",
+                    Bundle()
                 )
             } else {
                 repository.updateTask(

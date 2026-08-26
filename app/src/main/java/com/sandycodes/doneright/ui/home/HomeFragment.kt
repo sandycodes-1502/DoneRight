@@ -134,6 +134,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         addtaskbtn.setOnClickListener {
             AddEditTaskBottomSheet().show(parentFragmentManager, "AddEditTaskBottomSheet")
+            parentFragmentManager.setFragmentResultListener(
+                "task_added",
+                viewLifecycleOwner
+            ) { _, _ ->
+
+                binding.taskRecyclerView.post {
+                    binding.taskRecyclerView.smoothScrollToPosition(0)
+                }
+            }
         }
     }
 
